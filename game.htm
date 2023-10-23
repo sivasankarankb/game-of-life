@@ -28,6 +28,58 @@
 
             }
         }
+
+        function makeCheckeredBuffer(cols, rows){
+            const buffer = []
+
+            for(var row=0; row < rows; row++){
+                const rowArray = []
+
+                for(var col=0; col < cols; col++){
+                    const cellValue = (row + col) % 2
+                    rowArray.push(cellValue)
+                }
+
+                buffer.push(rowArray)
+            }
+
+            return buffer
+        }
+
+        function startGame(){
+            function cellsInLength(length, cellSize){
+                return Math.floor(length / cellSize)
+            }
+
+            function clampToSize(number, size){
+                return number - ( number % size)
+            }
+
+            const cellSize = 16
+
+            const windowWidth = clampToSize(window.innerWidth, cellSize)
+            const windowHeight = clampToSize(window.innerHeight, cellSize)
+            const hMargin = window.innerWidth - windowWidth
+            const vMargin = window.innerHeight - windowHeight
+
+            const left = Math.floor(hMargin / 2)
+            const top = Math.floor(vMargin / 2)
+            const right = left + windowWidth
+            const bottom = top + windowHeight
+
+            const hCells = cellsInLength(windowWidth, cellSize)
+            const vCells = cellsInLength(windowHeight, cellSize)
+
+            const gameCanvas = document.getElementById("gamecanvas")
+
+            const renderer = new GameRenderer(
+                gameCanvas, left, top, right, bottom, hCells, vCells
+            )
+
+            renderer.draw(makeCheckeredBuffer(hCells, vCells))
+        }
+
+        startGame();
     </script>
 </body>
 </html>
