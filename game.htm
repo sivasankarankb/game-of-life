@@ -19,6 +19,23 @@
 <body>
     <canvas id="gamecanvas"></canvas>
     <script>
+        class GameInput{
+            constructor(canvas, left, top, right, bottom, hCells, vCells){
+
+            }
+
+            addPlayPauseListener(listener){
+                // Function 'listener()' will be called on play/pause event.
+                // Remove these comments once implemented.
+            }
+
+            addCellClickListener(listener){
+                // Function 'listener(row, col)' will be called on cell click.
+                // It will be passed the cell row as arg1 and column as arg2.
+                // Remove these comments once implemented.
+            }
+        }
+
         class GameRenderer{
             constructor(canvas, left, top, right, bottom, hCells, vCells){
 
