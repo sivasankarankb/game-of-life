@@ -382,6 +382,7 @@
                 }
 
                 this.#setGrid(newGrid)
+                return newGrid
             }
         }
 
@@ -400,8 +401,7 @@
             setInterval(
                 function (){
                     requestAnimationFrame(function (){
-                        game.calculateNextGrid()
-                        renderer.draw(game.getGrid())
+                        renderer.draw(game.calculateNextGrid())
                     })
                 },
                 
