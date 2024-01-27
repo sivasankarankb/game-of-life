@@ -254,7 +254,7 @@
             return buffer
         }
 
-        function startGame(){
+        function makeGameRendererFor(canvas, width, height){
             function cellsInLength(length, cellSize){
                 return Math.floor(length / cellSize)
             }
@@ -265,10 +265,10 @@
 
             const cellSize = 16
 
-            const windowWidth = clampToSize(window.innerWidth, cellSize)
-            const windowHeight = clampToSize(window.innerHeight, cellSize)
-            const hMargin = window.innerWidth - windowWidth
-            const vMargin = window.innerHeight - windowHeight
+            const windowWidth = clampToSize(width, cellSize)
+            const windowHeight = clampToSize(height, cellSize)
+            const hMargin = width - windowWidth
+            const vMargin = height - windowHeight
 
             const left = Math.floor(hMargin / 2)
             const top = Math.floor(vMargin / 2)
@@ -278,10 +278,20 @@
             const hCells = cellsInLength(windowWidth, cellSize)
             const vCells = cellsInLength(windowHeight, cellSize)
 
+            return {
+                renderer: new GameRenderer(
+                    canvas, left, top, right, bottom, hCells, vCells
+                ),
+                
+                hCells: hCells, vCells: vCells
+            }
+        }
+
+        function startGame(){
             const gameCanvas = document.getElementById("gamecanvas")
 
-            const renderer = new GameRenderer(
-                gameCanvas, left, top, right, bottom, hCells, vCells
+            const { renderer, hCells, vCells } = makeGameRendererFor(
+                gameCanvas, window.innerWidth, window.innerHeight
             )
 
             renderer.draw(makeCheckeredBuffer(hCells, vCells))
