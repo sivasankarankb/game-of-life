@@ -237,23 +237,6 @@
             }
         }
 
-        function makeCheckeredBuffer(cols, rows){
-            const buffer = []
-
-            for(var row=0; row < rows; row++){
-                const rowArray = []
-
-                for(var col=0; col < cols; col++){
-                    const cellValue = (row + col) % 2
-                    rowArray.push(cellValue)
-                }
-
-                buffer.push(rowArray)
-            }
-
-            return buffer
-        }
-
         function makeGameRendererFor(canvas, width, height){
             function cellsInLength(length, cellSize){
                 return Math.floor(length / cellSize)
