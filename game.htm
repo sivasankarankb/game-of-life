@@ -287,6 +287,47 @@
             }
         }
 
+        class GameOfLife{
+            #hCells
+            #vCells
+            #grid
+
+            getGrid(){
+                return this.#grid
+            }
+
+            #clearGrid(){
+                this.#grid = []
+
+                for(var row=0; row < this.#vCells; row++){
+                    const rowArray = []
+
+                    for(var col=0; col < this.#hCells; col++){
+                        const cellValue = (row + col) % 2
+                        rowArray.push(cellValue)
+                    }
+
+                    this.#grid.push(rowArray)
+                }
+            }
+
+            #seedGrid(){
+                const grid = this.getGrid()
+                for(var row=0; row < this.#vCells; row++){
+                    for(var col=0; col < this.#hCells; col++){
+                        grid[row][col] = Math.round(Math.random())
+                    }
+                }
+            }
+            
+            constructor(hCells, vCells){
+                this.#hCells = hCells
+                this.#vCells = vCells
+                this.#clearGrid(vCells, hCells)
+                this.#seedGrid()
+            }
+        }
+
         function startGame(){
             const gameCanvas = document.getElementById("gamecanvas")
 
