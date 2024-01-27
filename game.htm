@@ -209,7 +209,6 @@
             }
 
             draw(buffer){
-                const startTS = new Date()
                 //Clip coordinates go from (-1,1)(top left) to (1,-1)(bottom right)
                 const cellHalfSize = [1 / this.hCells, 1 / this.vCells]
 
@@ -234,9 +233,6 @@
                 }
 
                 this.DrawVertArray(aliveVerts, this.Colors.cell)
-
-                const endTS = new Date()
-                console.log('Draw', endTS - startTS)
             }
         }
 
@@ -398,7 +394,6 @@
             }
 
             calculateNextGrid(){
-                const startTS = new Date()
                 const newGrid = []
 
                 for(var row=0; row < this.#vCells; row++){
@@ -416,9 +411,6 @@
                 }
 
                 this.#setGrid(newGrid)
-
-                const endTS = new Date()
-                console.log('Calculate', endTS - startTS)
             }
         }
 
