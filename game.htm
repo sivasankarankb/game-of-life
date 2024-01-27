@@ -288,8 +288,7 @@
                     const rowArray = []
 
                     for(var col=0; col < this.#hCells; col++){
-                        const cellValue = (row + col) % 2
-                        rowArray.push(cellValue)
+                        rowArray.push(0)
                     }
 
                     clearGrid.push(rowArray)
