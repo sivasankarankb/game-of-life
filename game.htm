@@ -219,21 +219,22 @@
                 cellHalfSize[0],-cellHalfSize[1],-cellHalfSize[0],
                 -cellHalfSize[1],-cellHalfSize[0],cellHalfSize[1]]
 
+                let aliveVerts = []
                 this.ClearCanvas(this.Colors.background)
 
                 for(var row=0; row < this.vCells; row++){
                     for(var col=0; col < this.hCells; col++){
-                        let offset = [-1 + (col * 2 + 1) * cellHalfSize[0], 1 - (row * 2 + 1) * cellHalfSize[1]]
-                        let verts = [baseVerts[0] + offset[0],baseVerts[1] + offset[1],baseVerts[2] + offset[0],
-                        baseVerts[3] + offset[1],baseVerts[4] + offset[0],baseVerts[5] + offset[1],
-                        baseVerts[6] + offset[0],baseVerts[7] + offset[1],baseVerts[8] + offset[0],
-                        baseVerts[9] + offset[1],baseVerts[10] + offset[0],baseVerts[11] + offset[1]]
-
                         if (buffer[row][col] > 0){
-                            this.DrawVertArray(verts, this.Colors.cell)
+                            let offset = [-1 + (col * 2 + 1) * cellHalfSize[0], 1 - (row * 2 + 1) * cellHalfSize[1]]
+                            aliveVerts.push(baseVerts[0] + offset[0],baseVerts[1] + offset[1],baseVerts[2] + offset[0],
+                            baseVerts[3] + offset[1],baseVerts[4] + offset[0],baseVerts[5] + offset[1],
+                            baseVerts[6] + offset[0],baseVerts[7] + offset[1],baseVerts[8] + offset[0],
+                            baseVerts[9] + offset[1],baseVerts[10] + offset[0],baseVerts[11] + offset[1])
                         }
                     }
                 }
+
+                this.DrawVertArray(aliveVerts, this.Colors.cell)
 
                 const endTS = new Date()
                 console.log('Draw', endTS - startTS)
@@ -249,7 +250,7 @@
                 return number - ( number % size)
             }
 
-            const cellSize = 8
+            const cellSize = 4
 
             const windowWidth = clampToSize(width, cellSize)
             const windowHeight = clampToSize(height, cellSize)
@@ -432,7 +433,7 @@
             const game = new GameOfLife(hCells, vCells)
             renderer.draw(game.getGrid())
 
-            const frameDuration = 1000 / 15
+            const frameDuration = 1000 / 60
             
             setInterval(
                 function (){
