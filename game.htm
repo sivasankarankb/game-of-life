@@ -335,7 +335,9 @@
                 gameCanvas, window.innerWidth, window.innerHeight
             )
 
-            renderer.draw(makeCheckeredBuffer(hCells, vCells))
+            const game = new GameOfLife(hCells, vCells)
+            
+            renderer.draw(game.getGrid)
         }
 
         startGame();
