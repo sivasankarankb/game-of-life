@@ -237,7 +237,7 @@
             }
         }
 
-        function makeGameRendererFor(canvas, width, height){
+        function makeGameRendererFor(canvas, width, height, cellSize){
             function cellsInLength(length, cellSize){
                 return Math.floor(length / cellSize)
             }
@@ -245,8 +245,6 @@
             function clampToSize(number, size){
                 return number - ( number % size)
             }
-
-            const cellSize = 16
 
             const windowWidth = clampToSize(width, cellSize)
             const windowHeight = clampToSize(height, cellSize)
@@ -392,7 +390,7 @@
             const gameCanvas = document.getElementById("gamecanvas")
 
             const { renderer, hCells, vCells } = makeGameRendererFor(
-                gameCanvas, window.innerWidth, window.innerHeight
+                gameCanvas, window.innerWidth, window.innerHeight, 16
             )
 
             const game = new GameOfLife(hCells, vCells)
