@@ -284,7 +284,7 @@
             }
 
             #clearGrid(){
-                this.#grid = []
+                const clearGrid = []
 
                 for(var row=0; row < this.#vCells; row++){
                     const rowArray = []
@@ -294,8 +294,10 @@
                         rowArray.push(cellValue)
                     }
 
-                    this.#grid.push(rowArray)
+                    clearGrid.push(rowArray)
                 }
+
+                this.#setGrid(clearGrid)
             }
 
             #seedGrid(){
