@@ -394,11 +394,23 @@
             )
 
             const game = new GameOfLife(hCells, vCells)
-            
             renderer.draw(game.getGrid())
+
+            const frameDuration = 1000 / 60
+            
+            setInterval(
+                function (){
+                    requestAnimationFrame(function (){
+                        game.calculateNextGrid()
+                        renderer.draw(game.getGrid())
+                    })
+                },
+                
+                frameDuration
+            )
         }
 
-        startGame();
+        startGame()
     </script>
 </body>
 </html>
