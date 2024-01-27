@@ -279,6 +279,10 @@
                 return this.#grid
             }
 
+            #setGrid(grid){
+                this.#grid = grid
+            }
+
             #clearGrid(){
                 this.#grid = []
 
@@ -308,6 +312,77 @@
                 this.#vCells = vCells
                 this.#clearGrid(vCells, hCells)
                 this.#seedGrid()
+            }
+
+            #calculateNextCellState(row, col){
+                const grid = this.getGrid()
+
+                let topIndex = row - 1
+                let bottomIndex = row + 1
+
+                if(topIndex < 0){
+                    topIndex = topIndex + this.#vCells
+                }
+
+                else if(bottomIndex >= this.#vCells){
+                    bottomIndex = bottomIndex - this.#vCells
+                }
+
+                let leftIndex = col - 1
+                let rightIndex = col + 1
+
+                if(leftIndex < 0){
+                    leftIndex = leftIndex + this.#hCells
+                }
+
+                else if(rightIndex >= this.#hCells){
+                    rightIndex = rightIndex - this.#hCells
+                }
+
+                let aliveNeighbors = 0
+
+                aliveNeighbors += grid[topIndex][leftIndex]
+                aliveNeighbors += grid[topIndex][col]
+                aliveNeighbors += grid[topIndex][rightIndex]
+                aliveNeighbors += grid[row][leftIndex]
+                aliveNeighbors += grid[row][rightIndex]
+                aliveNeighbors += grid[bottomIndex][leftIndex]
+                aliveNeighbors += grid[bottomIndex][col]
+                aliveNeighbors += grid[bottomIndex][rightIndex]
+
+                let cellState = grid[row][col]
+                
+                if(cellState === 1){
+                    if(aliveNeighbors < 2 || aliveNeighbors > 3){
+                        cellState = 0
+                    }
+                }
+
+                else if(aliveNeighbors === 3){
+                    cellState = 1
+                }
+                
+                return cellState
+            }
+
+            calculateNextGrid(){
+                const newGrid = []
+
+                for(var row=0; row < this.#vCells; row++){
+                    const rowArray = []
+
+                    for(var col=0; col < this.#hCells; col++){
+                        const cellValue = this.#calculateNextCellState(
+                            row, col
+                        )
+
+                        rowArray.push(cellValue)
+                    }
+
+                    newGrid.push(rowArray)
+                }
+
+                this.#setGrid(newGrid)
             }
         }
 
