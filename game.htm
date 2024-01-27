@@ -219,6 +219,8 @@
                 cellHalfSize[0],-cellHalfSize[1],-cellHalfSize[0],
                 -cellHalfSize[1],-cellHalfSize[0],cellHalfSize[1]]
 
+                this.ClearCanvas(this.Colors.background)
+
                 for(var row=0; row < this.vCells; row++){
                     for(var col=0; col < this.hCells; col++){
                         let offset = [-1 + (col * 2 + 1) * cellHalfSize[0], 1 - (row * 2 + 1) * cellHalfSize[1]]
@@ -229,9 +231,6 @@
 
                         if (buffer[row][col] > 0){
                             this.DrawVertArray(verts, this.Colors.cell)
-                        }
-                        else{
-                            this.DrawVertArray(verts, this.Colors.background)
                         }
                     }
                 }
