@@ -210,6 +210,7 @@
             }
 
             draw(buffer){
+                const startTS = new Date()
                 //Clip coordinates go from (-1,1)(top left) to (1,-1)(bottom right)
                 const cellHalfSize = [1 / this.hCells, 1 / this.vCells]
 
@@ -234,6 +235,9 @@
                         }
                     }
                 }
+
+                const endTS = new Date()
+                console.log('Draw', endTS - startTS)
             }
         }
 
@@ -246,7 +250,7 @@
                 return number - ( number % size)
             }
 
-            const cellSize = 16
+            const cellSize = 8
 
             const windowWidth = clampToSize(width, cellSize)
             const windowHeight = clampToSize(height, cellSize)
@@ -274,13 +278,21 @@
             #hCells
             #vCells
             #grid
+            #gridLocked
+
+            STATE_ALIVE = 1
+            STATE_DEAD = 0
 
             getGrid(){
                 return this.#grid
             }
 
+            #setGrid(grid){
+                this.#grid = grid
+            }
+
             #clearGrid(){
-                this.#grid = []
+                const clearGrid = []
 
                 for(var row=0; row < this.#vCells; row++){
                     const rowArray = []
@@ -290,8 +302,10 @@
                         rowArray.push(cellValue)
                     }
 
-                    this.#grid.push(rowArray)
+                    clearGrid.push(rowArray)
                 }
+
+                this.#setGrid(clearGrid)
             }
 
             #seedGrid(){
@@ -309,6 +323,104 @@
                 this.#clearGrid(vCells, hCells)
                 this.#seedGrid()
             }
+
+            #calculateNextCellState(row, col){
+                const grid = this.getGrid()
+
+                let topIndex = row - 1
+                let bottomIndex = row + 1
+
+                if(topIndex < 0){
+                    topIndex = topIndex + this.#vCells
+                }
+
+                else if(bottomIndex >= this.#vCells){
+                    bottomIndex = bottomIndex - this.#vCells
+                }
+
+                let leftIndex = col - 1
+                let rightIndex = col + 1
+
+                if(leftIndex < 0){
+                    leftIndex = leftIndex + this.#hCells
+                }
+
+                else if(rightIndex >= this.#hCells){
+                    rightIndex = rightIndex - this.#hCells
+                }
+
+                let aliveNeighbors = 0
+
+                if(grid[topIndex][leftIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[topIndex][col]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[topIndex][rightIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[row][leftIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[row][rightIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[bottomIndex][leftIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[bottomIndex][col]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                if(grid[bottomIndex][rightIndex]  === this.STATE_ALIVE){
+                    aliveNeighbors++
+                }
+
+                let cellState = grid[row][col]
+                
+                if(cellState === this.STATE_ALIVE){
+                    if(aliveNeighbors < 2 || aliveNeighbors > 3){
+                        cellState = this.STATE_DEAD
+                    }
+                }
+
+                else if(aliveNeighbors === 3){
+                    cellState = this.STATE_ALIVE
+                }
+                
+                return cellState
+            }
+
+            calculateNextGrid(){
+                const startTS = new Date()
+                const newGrid = []
+
+                for(var row=0; row < this.#vCells; row++){
+                    const rowArray = []
+
+                    for(var col=0; col < this.#hCells; col++){
+                        const cellValue = this.#calculateNextCellState(
+                            row, col
+                        )
+
+                        rowArray.push(cellValue)
+                    }
+
+                    newGrid.push(rowArray)
+                }
+
+                this.#setGrid(newGrid)
+
+                const endTS = new Date()
+                console.log('Calculate', endTS - startTS)
+            }
         }
 
         function startGame(){
@@ -319,11 +431,23 @@
             )
 
             const game = new GameOfLife(hCells, vCells)
+            renderer.draw(game.getGrid())
+
+            const frameDuration = 1000 / 15
             
-            renderer.draw(game.getGrid)
+            setInterval(
+                function (){
+                    requestAnimationFrame(function (){
+                        game.calculateNextGrid()
+                        renderer.draw(game.getGrid())
+                    })
+                },
+                
+                frameDuration
+            )
         }
 
-        startGame();
+        startGame()
     </script>
 </body>
 </html>
