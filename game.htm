@@ -350,13 +350,13 @@
                 aliveNeighbors += grid[bottomIndex][rightIndex]
 
                 let cellState = grid[row][col]
-                
-                if(aliveNeighbors < 2 || aliveNeighbors > 3){
-                    cellState = 0
+
+                if(aliveNeighbors === 3){
+                    cellState = 1
                 }
 
-                else if(aliveNeighbors === 3){
-                    cellState = 1
+                else if(aliveNeighbors !== 2){
+                    cellState = 0
                 }
                 
                 return cellState
